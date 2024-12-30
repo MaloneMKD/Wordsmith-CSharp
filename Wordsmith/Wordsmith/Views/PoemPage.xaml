@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Wordsmith.Views"
+             xmlns:cvt="clr-namespace:Wordsmith.Converters"
+             xmlns:md="clr-namespace:Wordsmith.Models"
+             x:Class="Wordsmith.Views.PoemPage"
+             Title="PoemPage">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <cvt:InvertedBoolConverter x:Key="InvertedBoolConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto, 110, 1*">
+        <!--Title Grid-->
+        <Grid Grid.Row="0" RowDefinitions="1*, 1*, 1*" BackgroundColor="White">
+            <Label Grid.Row="0" Text="{Binding DisplayPoem.Title}" VerticalOptions="Center" HorizontalOptions="Center" 
+                   FontSize="22"/>
+            <Label Grid.Row="1"  Text="{Binding DisplayPoem.Author}" VerticalOptions="Center" HorizontalOptions="Center"
+                   FontSize="16" TextColor="Gray"/>
+            <Grid Grid.Row="2" ColumnDefinitions="1*, Auto" Margin="10, 0">
+                <Rectangle Grid.Column="0" HeightRequest="2" HorizontalOptions="FillAndExpand" BackgroundColor="Black"/>
+                <Label Grid.Column="1" Text="{Binding DisplayPoem.Date}" VerticalOptions="Center" HorizontalOptions="End"
+                   FontSize="13" TextColor="Gray"/>
+            </Grid>
+        </Grid>
+        
+        <!--Edit Grid-->
+        <Grid Grid.Row="1" BackgroundColor="#343131" RowDefinitions="1*, 1*" ColumnDefinitions="1*, 1*, 1*, 1*" Margin="5" IsVisible="True">
+            <Label Text="Search Rhyme" TextColor="White" Grid.Row="1" Grid.Column="0" VerticalOptions="Center" 
+                   HorizontalOptions="Center" FontSize="14" IsVisible="{Binding Editing}" Padding="5, 0, 0, 0"/>
+            <SearchBar Grid.Row="1"  Grid.Column="1" Grid.ColumnSpan="3" BackgroundColor="Transparent" TextColor="White" 
+                       IsVisible="{Binding Editing}"/>
+            <ImageButton Grid.Column="0" Source="align_left.png" Margin="0, 10, 0, 10"/>
+            <ImageButton Grid.Column="1" Source="align_center.png" Margin="0, 10, 0, 10"/>
+            <ImageButton Grid.Column="2" Source="align_right.png" Margin="0, 10, 0, 10"/>
+            <Button Grid.Column="3" Text="Save" Margin="5" Command="{Binding SaveCommand}" IsVisible="{Binding Editing}"/>
+            <Button Grid.Column="3" Text="Edit"  Margin="5" Command="{Binding EditCommand}" IsVisible="{Binding Editing, Converter={StaticResource InvertedBoolConverter}}"/>
+        </Grid>
+
+        <!--PoemGrid-->
+        <Grid Grid.Row="2">
+            <Border BackgroundColor="White" Stroke="Transparent" StrokeShape="RoundRectangle 5, 5, 5, 5" Margin="5">
+                <Editor BackgroundColor="White" IsReadOnly="{Binding Editing, Converter={StaticResource InvertedBoolConverter}}" Text="{Binding DisplayPoem.Poem}"
+                            MinimumHeightRequest="100" HorizontalTextAlignment="Center"/>
+            </Border>
+        </Grid>
+
+        <!--Buttons-->
+        <!--<Grid Grid.Row="3" BackgroundColor="#343131" ColumnDefinitions="1*, 1*, 1*, 1*, Auto" Margin="5" IsVisible="{Binding Editing, Converter={StaticResource InvertedBoolconverter}}">
+            <Button Grid.Column="0" Text="Edit" IsVisible="True" Margin="5"/>
+            <ImageButton Grid.Column="1" Source="align_left.png" Margin="0, 10, 0, 10"/>
+            <ImageButton Grid.Column="2" Source="align_center.png" Margin="0, 10, 0, 10"/>
+            <ImageButton Grid.Column="3" Source="align_right.png" Margin="0, 10, 0, 10"/>
+            <Button Grid.Column="4" Text="Save"  Margin="5" Command="{Binding EditCommand}"/>
+        </Grid>-->
+
+    </Grid>
+    
+</ContentPage>

@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Wordsmith.Views"
+             xmlns:md="clr-namespace:Wordsmith.Models"
+             x:Class="Wordsmith.Views.MainPage">
+
+    <ContentPage.Resources>
+        <!--Title Color-->
+        <Color x:Key="TitleColor">#353535</Color>
+        
+        <!--Card Background Color-->
+        <LinearGradientBrush x:Key="CardBackground">
+            <GradientStop Color="#FFF2D7"
+                          Offset="0.1" />
+            <GradientStop Color="#EBDFC6"
+                          Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto, 1*">
+        <!--Menu Bar-->
+        <Border BackgroundColor="#343131" Stroke="Transparent" Padding="10" StrokeShape="RoundRectangle 5, 5, 5, 5" Margin="5, 0, 5, 0">
+            <Grid ColumnDefinitions="2*, 1*">
+                <SearchBar Grid.Column="0" BackgroundColor="White"/>
+                <ImageButton Grid.Column="1" Source="newpoem.png" BackgroundColor="White" HorizontalOptions="End"
+                             Aspect="Center" CornerRadius="5">
+                    <VisualStateManager.VisualStateGroups>
+                        <VisualStateGroupList>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal">
+                                    <VisualState.Setters>
+                                        <Setter Property="Scale" Value="1.0"/>
+                                        <Setter Property="Opacity" Value="1.0"/>
+                                    </VisualState.Setters>
+                                </VisualState>
+
+                                <VisualState x:Name="Pressed">
+                                    <VisualState.Setters>
+                                        <Setter Property="Scale" Value="0.99"/>
+                                        <Setter Property="Opacity" Value="0.8"/>
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateGroupList>
+                    </VisualStateManager.VisualStateGroups>
+                </ImageButton>
+            </Grid>
+        </Border>
+        <!--Poem List-->
+        <ScrollView Grid.Row="1" Margin="0, 5, 0, 0"> 
+            <ListView ItemsSource="{Binding Poems}" HasUnevenRows="True" SeparatorColor="AntiqueWhite" SelectedItem="{Binding SelectedPoem, Mode=TwoWay}"
+                      ItemSelected="ListView_ItemSelected">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="md:PoemModel">
+                        <ViewCell>
+                            <Border Background="{StaticResource CardBackground}" Margin="5" StrokeShape="RoundRectangle 10, 0, 0, 10"
+                                    Stroke="Transparent">
+                                <Grid RowDefinitions="Auto, Auto, Auto" ColumnDefinitions="1*, 1*" Padding="5">
+                                    <Label Grid.Row="0" Text="{Binding Path=Title}" TextColor="{StaticResource TitleColor}" FontSize="18"/>
+                                    <Label Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding Path=Poem}" LineBreakMode="TailTruncation"
+                                           TextColor="#454545" MinimumHeightRequest="50"/>
+                                    <Label Grid.Row="2" Grid.Column="1" HorizontalOptions="End" Text="{Binding Path=Author}"/>
+                                    <Label Grid.Row="2" Grid.Column="0" Text="{Binding Path=Date}"/>
+                                </Grid>
+                            </Border>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </ScrollView>
+    </Grid>
+
+</ContentPage>
