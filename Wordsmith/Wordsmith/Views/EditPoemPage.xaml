@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Wordsmith.Views"
+             xmlns:cvt="clr-namespace:Wordsmith.Converters"
+             x:Class="Wordsmith.Views.EditPoemPage">
+
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="1*, Auto">
+            <Label Grid.Column="0" Text="Edit Poem"/>
+            <ActivityIndicator Grid.Column="1" IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}"
+                               Margin="0, 0, 10, 0" Color="#F1E5D1"/>
+        </Grid>
+    </Shell.TitleView>
+
+    <ContentPage.Resources>
+        <cvt:StringToTextAlignmentConverter x:Key="StringToAlignmentConverter"/>
+
+        <!--Button color-->
+        <LinearGradientBrush x:Key="ButtonBackground">
+            <GradientStop Color="#F1E5D1"
+          Offset="0.1" />
+            <GradientStop Color="#F1E5D1"
+          Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto, 110, 1*">
+        <!--Title Grid-->
+        <Grid Grid.Row="0" RowDefinitions="1*, 1*, 1*, 1*" BackgroundColor="White">
+            <Entry Grid.Row="0" Text="{Binding CurrentPoem.Title, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Center" 
+               FontSize="22"/>
+            <Entry Grid.Row="1"  Text="{Binding CurrentPoem.Author, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Center"
+               FontSize="16" TextColor="Gray"/>
+            <Grid Grid.Row="2" ColumnDefinitions="1*, Auto" Margin="18, 2">
+                <Rectangle Grid.Column="0" HeightRequest="2" HorizontalOptions="FillAndExpand" BackgroundColor="#343131"/>
+            </Grid>
+            <Label Grid.Row="3" Text="{Binding CurrentPoem.Date}" VerticalOptions="Center" HorizontalOptions="End"
+            FontSize="14" TextColor="Gray" Margin="18, 0"/>
+        </Grid>
+
+        <!--Edit Grid-->
+        <Grid Grid.Row="1" BackgroundColor="#343131" RowDefinitions="1*, 1*" ColumnDefinitions="1*, 1*, 1*, 1*" Margin="5" IsVisible="True">
+            <ImageButton Grid.Column="0" Source="align_left.png" Margin="0, 10, 0, 10" Command="{Binding AlignCommand}" CommandParameter="left"/>
+            <ImageButton Grid.Column="1" Source="align_center.png" Margin="0, 10, 0, 10" Command="{Binding AlignCommand}" CommandParameter="center"/>
+            <ImageButton Grid.Column="2" Source="align_right.png" Margin="0, 10, 0, 10" Command="{Binding AlignCommand}" CommandParameter="right"/>
+            <Button Grid.Column="3" Text="Save"  Margin="5" Command="{Binding SaveCommand}"
+                    Background="{StaticResource ButtonBackground}" TextColor="#343131"/>
+
+            <Grid ColumnDefinitions="1*, Auto, Auto" Grid.Row="1" Padding="5, 0, 0, 0" Grid.Column="0" Grid.ColumnSpan="4">
+                <Label Grid.Row="0" Grid.Column="1" Text="Font Size" TextColor="White" HorizontalOptions="Center"
+                    VerticalOptions="Center" HorizontalTextAlignment="Center" Padding="5, 0, 5, 0"/>
+                <Picker Grid.Row="0" HorizontalOptions="Center" VerticalOptions="Center"
+                    Grid.Column="2" TextColor="White" x:Name="FontSizePicker" SelectedIndex="1">
+                    <Picker.Items>
+                        <x:String>15</x:String>
+                        <x:String>16</x:String>
+                        <x:String>17</x:String>
+                        <x:String>18</x:String>
+                        <x:String>19</x:String>
+                        <x:String>20</x:String>
+                        <x:String>21</x:String>
+                        <x:String>22</x:String>
+                        <x:String>23</x:String>
+                        <x:String>24</x:String>
+                        <x:String>25</x:String>
+                    </Picker.Items>
+                </Picker>
+
+                <SearchBar Grid.Row="0" Grid.Column="0"
+                           SearchCommand="{Binding SearchCommand}" x:Name="SearchBar"
+                           BackgroundColor="White" Placeholder="Rhyme Search" Margin="0, 0, 5, 5" 
+                           SearchCommandParameter="{Binding Source={RelativeSource Self}, Path=Text}"
+                           VerticalOptions="Center"/>
+            </Grid>
+        </Grid>
+
+        <!--PoemGrid-->
+        <Grid Grid.Row="2">
+            <Border BackgroundColor="White" Stroke="Transparent" StrokeShape="RoundRectangle 5, 5, 5, 5" Margin="5">
+                <Editor BackgroundColor="White" Text="{Binding CurrentPoem.Poem, Mode=TwoWay}" 
+                        FontSize="{Binding Source={x:Reference FontSizePicker}, Path=SelectedItem}"
+                        HorizontalTextAlignment="{Binding CurrentPoem.Alignment, Mode=TwoWay, Converter={StaticResource StringToAlignmentConverter}}" 
+                        Margin="10, 0"/>
+            </Border>
+        </Grid>
+
+    </Grid>
+</ContentPage>

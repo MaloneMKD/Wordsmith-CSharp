@@ -5,15 +5,24 @@
              xmlns:md="clr-namespace:Wordsmith.Models"
              x:Class="Wordsmith.Views.MainPage">
 
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="Auto, Auto, 1*" Margin="0, 0, 0, 20">
+            <Label Grid.Column="0" Text="Wordsmith" TextColor="#343131" FontSize="24" VerticalTextAlignment="End"/>
+            <Image Grid.Column="1" Source="quill.png" Margin="10, 0, 0, 0"/>
+            <ActivityIndicator Grid.Column="2" IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}"
+                   Margin="0, 0, 10, 0" Color="#F1E5D1" HorizontalOptions="End"/>
+        </Grid>
+    </Shell.TitleView>
+
     <ContentPage.Resources>
         <!--Title Color-->
-        <Color x:Key="TitleColor">#353535</Color>
+        <Color x:Key="TitleColor">#343131</Color>
         
         <!--Card Background Color-->
         <LinearGradientBrush x:Key="CardBackground">
-            <GradientStop Color="#FFF2D7"
+            <GradientStop Color="#F1E5D1"
                           Offset="0.1" />
-            <GradientStop Color="#EBDFC6"
+            <GradientStop Color="#F1E5D1"
                           Offset="1.0" />
         </LinearGradientBrush>
     </ContentPage.Resources>
@@ -21,10 +30,12 @@
     <Grid RowDefinitions="Auto, 1*">
         <!--Menu Bar-->
         <Border BackgroundColor="#343131" Stroke="Transparent" Padding="10" StrokeShape="RoundRectangle 5, 5, 5, 5" Margin="5, 0, 5, 0">
-            <Grid ColumnDefinitions="2*, 1*">
+            <Grid ColumnDefinitions="2*, Auto, Auto">
                 <SearchBar Grid.Column="0" BackgroundColor="White"/>
-                <ImageButton Grid.Column="1" Source="newpoem.png" BackgroundColor="White" HorizontalOptions="End"
-                             Aspect="Center" CornerRadius="5">
+                <Label Grid.Column="1" Text="New Poem" TextColor="White" HorizontalOptions="End"
+                       VerticalOptions="Center" Margin="20, 0, 10, 0" FontSize="14"/>
+                <ImageButton Grid.Column="2" Source="plus.png" BackgroundColor="White" HorizontalOptions="End"
+                             Aspect="Center" CornerRadius="5" Clicked="NewPoemButton_Clicked">
                     <VisualStateManager.VisualStateGroups>
                         <VisualStateGroupList>
                             <VisualStateGroup x:Name="CommonStates">
@@ -47,17 +58,20 @@
                 </ImageButton>
             </Grid>
         </Border>
+        
         <!--Poem List-->
         <ScrollView Grid.Row="1" Margin="0, 5, 0, 0"> 
             <ListView ItemsSource="{Binding Poems}" HasUnevenRows="True" SeparatorColor="AntiqueWhite" SelectedItem="{Binding SelectedPoem, Mode=TwoWay}"
-                      ItemSelected="ListView_ItemSelected">
+                      ItemSelected="ListView_ItemSelected" Margin="5">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="md:PoemModel">
                         <ViewCell>
-                            <Border Background="{StaticResource CardBackground}" Margin="5" StrokeShape="RoundRectangle 10, 0, 0, 10"
+                            <Border Background="{StaticResource CardBackground}" Margin="0, 0, 0, 2" StrokeShape="RoundRectangle 10, 0, 0, 10"
                                     Stroke="Transparent">
                                 <Grid RowDefinitions="Auto, Auto, Auto" ColumnDefinitions="1*, 1*" Padding="5">
                                     <Label Grid.Row="0" Text="{Binding Path=Title}" TextColor="{StaticResource TitleColor}" FontSize="18"/>
+                                    <Image Grid.Row="0" Grid.Column="1" Source="feather.png" HorizontalOptions="End"
+                                           Grid.RowSpan="2" VerticalOptions="Start"/>
                                     <Label Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding Path=Poem}" LineBreakMode="TailTruncation"
                                            TextColor="#454545" MinimumHeightRequest="50"/>
                                     <Label Grid.Row="2" Grid.Column="1" HorizontalOptions="End" Text="{Binding Path=Author}"/>

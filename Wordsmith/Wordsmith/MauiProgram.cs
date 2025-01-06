@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Wordsmith.Database;
 
 namespace Wordsmith
 {
@@ -18,7 +19,6 @@ namespace Wordsmith
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif
-
             return builder.Build();
         }
     }
