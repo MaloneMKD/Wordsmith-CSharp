@@ -6,10 +6,9 @@
              x:Class="Wordsmith.Views.EditPoemPage">
 
     <Shell.TitleView>
-        <Grid ColumnDefinitions="1*, Auto">
-            <Label Grid.Column="0" Text="Edit Poem"/>
-            <ActivityIndicator Grid.Column="1" IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}"
-                               Margin="0, 0, 10, 0" Color="#F1E5D1"/>
+        <Grid ColumnDefinitions="1*">
+            <ActivityIndicator Grid.Column="0" IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}"
+                               Margin="0, 0, 10, 0" Color="#F1E5D1" Scale="0.8" HorizontalOptions="End"/>
         </Grid>
     </Shell.TitleView>
 
@@ -25,49 +24,37 @@
         </LinearGradientBrush>
     </ContentPage.Resources>
 
-    <Grid RowDefinitions="Auto, 110, 1*">
+    <Grid RowDefinitions="Auto, Auto, 110, 1*">
+        <Image Grid.Column="0" Source="quill_pen.png" Margin="0" HorizontalOptions="Center"/>
+        
         <!--Title Grid-->
-        <Grid Grid.Row="0" RowDefinitions="1*, 1*, 1*, 1*" BackgroundColor="White">
+        <Grid Grid.Row="1" RowDefinitions="1*, 1*, 1*, 1*" BackgroundColor="White">
             <Entry Grid.Row="0" Text="{Binding CurrentPoem.Title, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Center" 
-               FontSize="22"/>
+               FontSize="18"/>
             <Entry Grid.Row="1"  Text="{Binding CurrentPoem.Author, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Center"
-               FontSize="16" TextColor="Gray"/>
+               FontSize="14" TextColor="Gray"/>
             <Grid Grid.Row="2" ColumnDefinitions="1*, Auto" Margin="18, 2">
                 <Rectangle Grid.Column="0" HeightRequest="2" HorizontalOptions="FillAndExpand" BackgroundColor="#343131"/>
             </Grid>
             <Label Grid.Row="3" Text="{Binding CurrentPoem.Date}" VerticalOptions="Center" HorizontalOptions="End"
-            FontSize="14" TextColor="Gray" Margin="18, 0"/>
+            FontSize="12" TextColor="Gray" Margin="18, 0"/>
         </Grid>
 
         <!--Edit Grid-->
-        <Grid Grid.Row="1" BackgroundColor="#343131" RowDefinitions="1*, 1*" ColumnDefinitions="1*, 1*, 1*, 1*" Margin="5" IsVisible="True">
+        <Grid Grid.Row="2" BackgroundColor="#343131" RowDefinitions="1*, 1*" ColumnDefinitions="1*, 1*, 1*, 1*" Margin="5" IsVisible="True">
             <ImageButton Grid.Column="0" Source="align_left.png" Margin="0, 10, 0, 10" Command="{Binding AlignCommand}" CommandParameter="left"/>
             <ImageButton Grid.Column="1" Source="align_center.png" Margin="0, 10, 0, 10" Command="{Binding AlignCommand}" CommandParameter="center"/>
             <ImageButton Grid.Column="2" Source="align_right.png" Margin="0, 10, 0, 10" Command="{Binding AlignCommand}" CommandParameter="right"/>
-            <Button Grid.Column="3" Text="Save"  Margin="5" Command="{Binding SaveCommand}"
+            <Button Grid.Column="3" Text="Save"  Margin="5" Command="{Binding SaveCommand}" FontSize="12"
                     Background="{StaticResource ButtonBackground}" TextColor="#343131"/>
 
-            <Grid ColumnDefinitions="1*, Auto, Auto" Grid.Row="1" Padding="5, 0, 0, 0" Grid.Column="0" Grid.ColumnSpan="4">
-                <Label Grid.Row="0" Grid.Column="1" Text="Font Size" TextColor="White" HorizontalOptions="Center"
-                    VerticalOptions="Center" HorizontalTextAlignment="Center" Padding="5, 0, 5, 0"/>
-                <Picker Grid.Row="0" HorizontalOptions="Center" VerticalOptions="Center"
-                    Grid.Column="2" TextColor="White" x:Name="FontSizePicker" SelectedIndex="1">
-                    <Picker.Items>
-                        <x:String>15</x:String>
-                        <x:String>16</x:String>
-                        <x:String>17</x:String>
-                        <x:String>18</x:String>
-                        <x:String>19</x:String>
-                        <x:String>20</x:String>
-                        <x:String>21</x:String>
-                        <x:String>22</x:String>
-                        <x:String>23</x:String>
-                        <x:String>24</x:String>
-                        <x:String>25</x:String>
-                    </Picker.Items>
-                </Picker>
+            <Grid ColumnDefinitions="1*, Auto, 0.5*, Auto" Grid.Row="1" Padding="5, 0, 0, 0" Grid.Column="0" Grid.ColumnSpan="4">
+                <Label Grid.Row="0" Grid.Column="3" TextColor="White" HorizontalOptions="Center" FontSize="12"
+                       VerticalOptions="Center" HorizontalTextAlignment="Center" Text="{Binding FontSize}" Margin="0, 0, 10, 0"/>
+                <Stepper Grid.Column="2" Minimum="10" Maximum="25" Increment="1" Value="{Binding FontSize}" 
+                         x:Name="FontSizeStepper" Scale="0.9"/>
 
-                <SearchBar Grid.Row="0" Grid.Column="0"
+                <SearchBar Grid.Row="0" Grid.Column="0" FontSize="14"
                            SearchCommand="{Binding SearchCommand}" x:Name="SearchBar"
                            BackgroundColor="White" Placeholder="Rhyme Search" Margin="0, 0, 5, 5" 
                            SearchCommandParameter="{Binding Source={RelativeSource Self}, Path=Text}"
@@ -76,12 +63,12 @@
         </Grid>
 
         <!--PoemGrid-->
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="3">
             <Border BackgroundColor="White" Stroke="Transparent" StrokeShape="RoundRectangle 5, 5, 5, 5" Margin="5">
                 <Editor BackgroundColor="White" Text="{Binding CurrentPoem.Poem, Mode=TwoWay}" 
-                        FontSize="{Binding Source={x:Reference FontSizePicker}, Path=SelectedItem}"
-                        HorizontalTextAlignment="{Binding CurrentPoem.Alignment, Mode=TwoWay, Converter={StaticResource StringToAlignmentConverter}}" 
-                        Margin="10, 0"/>
+                        FontSize="{Binding Source={x:Reference FontSizeStepper}, Path=Value}"
+                        HorizontalTextAlignment="{Binding CurrentPoem.Alignment, Mode=TwoWay, Converter={StaticResource StringToAlignmentConverter}}"
+                        Margin="10, 0" Keyboard="Text"/>
             </Border>
         </Grid>
 

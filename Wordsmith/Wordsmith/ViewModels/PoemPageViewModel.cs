@@ -21,5 +21,16 @@ namespace Wordsmith.ViewModels
                 OnPropertyChanged(nameof(DisplayPoem));
             }
         }
+
+        private int _fontSize = 14;
+        public int FontSize
+        {
+            get => _fontSize;
+            set
+            {
+                SetProperty(ref _fontSize, value);
+                OnPropertyChanged(nameof(FontSize));
+            }
+        }
     }
 }

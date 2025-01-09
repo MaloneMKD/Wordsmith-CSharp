@@ -11,7 +11,7 @@ namespace Wordsmith.Models
     public class PoemModel : ObservableObject
     {
         [PrimaryKey, AutoIncrement]
-        public int ID {  get; set; }
+        public int? ID {  get; set; }
 
         private string? _author;
         public string? Author 

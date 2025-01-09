@@ -36,6 +36,17 @@ namespace Wordsmith.ViewModels
             }
         }
 
+        private int _fontSize = 14;
+        public int FontSize
+        {
+            get => _fontSize;
+            set
+            {
+                SetProperty(ref _fontSize, value);
+                OnPropertyChanged(nameof(FontSize));
+            }
+        }
+
         public Command SaveCommand { get; }
         public Command<string> AlignCommand { get; }
         public Command<string> SearchCommand { get; }
@@ -54,7 +65,19 @@ namespace Wordsmith.ViewModels
                 string message = "";
                 if (CurrentPoem != null)
                 {
-                    if (await App.Database.Exists(CurrentPoem.ID))
+                    // If editing an existing poem
+                    if (App.PPVM.DisplayPoem != null)
+                    {
+                        // Set the dislay poem variables equal to the new values
+                        App.PPVM.DisplayPoem.Alignment = CurrentPoem.Alignment;
+                        App.PPVM.DisplayPoem.Title = CurrentPoem.Title;
+                        App.PPVM.DisplayPoem.ID = CurrentPoem.ID;
+                        App.PPVM.DisplayPoem.Date = CurrentPoem.Date;
+                        App.PPVM.DisplayPoem.Author = CurrentPoem.Author;
+                        App.PPVM.DisplayPoem.Poem = CurrentPoem.Poem;
+                    }
+
+                    if (CurrentPoem.ID != null)
                     {
                         // Update poem in database
                         await App.Database.UpdatePoem(CurrentPoem);
@@ -66,21 +89,22 @@ namespace Wordsmith.ViewModels
                         await App.Database.InsertNewPoem(CurrentPoem);
                         message = "New poem saved...";
                     }
-                }
-                // Add poem to poem list
-                if (App.Current != null && App.MPVM != null)
-                {
-                    App.MPVM.PopulatePoemList();
-                    App.Current.Dispatcher.Dispatch(async () =>
+
+                    // Add poem to poem list
+                    if (App.MPVM != null)
                     {
-                        await Task.Delay(100);
-                        IsBusy = true;
-                        // Navigate back to the main page
-                        await App.Current.Windows[0].Page!.Navigation.PopToRootAsync();
-                        await App.Current.Windows[0].Page!.DisplayAlert("Saved", message, "Ok");
-                        IsBusy = false;
-                        await Task.Delay(100);
-                    });
+                        App.MPVM.PopulatePoemList();
+                        App.Current.Dispatcher.Dispatch(async () =>
+                        {
+                            await Task.Delay(100);
+                            IsBusy = true;
+                            // Navigate back to the main page
+                            await App.Current.Windows[0].Page!.Navigation.PopToRootAsync();
+                            await App.Current.Windows[0].Page!.DisplayAlert("Saved", message, "Ok");
+                            IsBusy = false;
+                            await Task.Delay(100);
+                        });
+                    }
                 }
             });
         }
@@ -105,15 +129,20 @@ namespace Wordsmith.ViewModels
                         break;
                 }
             }
+
+            // Code to trigger the editor to be redrawn
+            int temp = FontSize;
+            FontSize = 30;
+            FontSize = temp;
         }
         public void SearchCommandExecute(string arg)
         {
             // Use API to get rhyming words
             string rhymebrain_url = $"https://rhymebrain.com/talk?function=getRhymes&word={arg}";
-            _ = GetRhymes(rhymebrain_url, arg) ;
+            GetRhymes(rhymebrain_url, arg) ;
         }
 
-        private async Task GetRhymes(string url, string arg)
+        private void GetRhymes(string url, string arg)
         {
             Application.Current!.Dispatcher.Dispatch(async () =>
             {
@@ -143,7 +172,14 @@ namespace Wordsmith.ViewModels
 
                             if (Application.Current!.Windows[0].Page != null)
                             {
-                                await Application.Current!.Windows[0].Page!.DisplayAlert($"Words that rhyme with {arg.ToUpper()}", words, "Ok");
+                                if(words.Count() <= 0)
+                                {
+                                    await Application.Current!.Windows[0].Page!.DisplayAlert("Yikes", $"There are no words that rhyme with {arg.ToUpper()}", "Ok");
+                                }
+                                else
+                                {
+                                    await Application.Current!.Windows[0].Page!.DisplayAlert($"Words that rhyme with {arg.ToUpper()}", words, "Ok");
+                                }
                             }
                         }
                     }

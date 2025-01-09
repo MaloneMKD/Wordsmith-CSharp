@@ -28,7 +28,7 @@ namespace Wordsmith.Database
         {
             Author = "W.H. Auden",
                     Title = "Funeral Blues",
-                    Date = "1938",
+                    Date = "Originally published in 1938",
                     Alignment = "left",
                     Poem =
 @"Stop all the clocks, cut off the telephone
@@ -56,7 +56,7 @@ For nothing now can ever come to any good."
         {
             Author = "William Shakespeare",
                     Title = "Sonnet 116",
-                    Date = "1608",
+                    Date = "Originally published in 1608",
                     Alignment = "left",
                     Poem =
 @"Let me not to the marriage of true minds

@@ -13,8 +13,16 @@ namespace Wordsmith.Views
 
         private void EditButton_Clicked(object sender, EventArgs e)
         {
-			App.EPPVM.CurrentPoem = App.PPVM!.DisplayPoem;
-            Navigation.PushAsync(App.EPP);
+            if (App.EPPVM.CurrentPoem != null && App.PPVM.DisplayPoem != null)
+            {
+                App.EPPVM.CurrentPoem.Alignment = App.PPVM.DisplayPoem.Alignment;
+                App.EPPVM.CurrentPoem.Title = App.PPVM.DisplayPoem.Title;
+                App.EPPVM.CurrentPoem.ID = App.PPVM.DisplayPoem.ID;
+                App.EPPVM.CurrentPoem.Date = App.PPVM.DisplayPoem.Date;
+                App.EPPVM.CurrentPoem.Author = App.PPVM.DisplayPoem.Author;
+                App.EPPVM.CurrentPoem.Poem = App.PPVM.DisplayPoem.Poem;
+                Navigation.PushAsync(App.EPP);
+            }
         }
 
         private void DeleteButton_Clicked(object sender, EventArgs e)

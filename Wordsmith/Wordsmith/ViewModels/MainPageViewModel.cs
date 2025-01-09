@@ -44,15 +44,15 @@ namespace Wordsmith.ViewModels
             PopulatePoemList();
         }
 
-        public void PopulatePoemList()
+        public async Task PopulatePoemList()
         {
             Poems.Clear();
-            var res = App.Database.GetPoemsAsync();
+            var res = await App.Database.GetPoemsAsync();
             App.Current!.Dispatcher.Dispatch(async () =>
             {
                 await Task.Delay(100);
                 IsBusy = true;
-                foreach (var poem in res.Result)
+                foreach (var poem in res)
                 {
                     Poems.Add(poem);
                 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualBasic.FileIO;
 using Wordsmith.Models;
 using Wordsmith.ViewModels;
+using Wordsmith.CustomControls;
 
 namespace Wordsmith.Views
 {
@@ -20,37 +21,36 @@ namespace Wordsmith.Views
             BindingContext = App.MPVM;
         }
 
-        // Function called when page is closing
-        protected override bool OnBackButtonPressed()
+        protected override void OnAppearing()
         {
-            // Dispose of the temp poem
-            TempPoem = null;
-            App.EPPVM.CurrentPoem = null;
-            return base.OnBackButtonPressed();
+            base.OnAppearing();
+            PoemListView.SelectedItem = null;
         }
 
         private void ListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            var temp = (PoemModel)e.SelectedItem;
-            if (temp.Title != null)
+            if (e.SelectedItem != null)
             {
-                Navigation.PushAsync(poemPage);
+                var temp = (PoemModel)e.SelectedItem;
+                if (temp.Title != null)
+                {
+                    Navigation.PushAsync(poemPage);
+                }
             }
         }
 
         private void NewPoemButton_Clicked(object sender, EventArgs e)
         {
-            PoemModel TempPoem = new PoemModel()
+            if (App.EPPVM.CurrentPoem != null)
             {
-                Title = "Title",
-                Author = "Author",
-                Date = DateTime.UtcNow.ToString("dddd dd MMM yyyy - hh:mm"),
-                Poem = "Enter Poem Here",
-                Alignment = "left"
-
-            };
-            App.EPPVM.CurrentPoem = TempPoem;
-            Navigation.PushAsync(App.EPP);
+                App.EPPVM.CurrentPoem.ID = null;
+                App.EPPVM.CurrentPoem.Alignment = "left";
+                App.EPPVM.CurrentPoem.Title = "Title"; ;
+                App.EPPVM.CurrentPoem.Date = DateTime.UtcNow.ToString("dddd dd MMM yyyy - hh:mm");
+                App.EPPVM.CurrentPoem.Author = "Author";
+                App.EPPVM.CurrentPoem.Poem = "Enter Poem Here";
+                Navigation.PushAsync(App.EPP);
+            }
         }
     }
 }
