@@ -7,23 +7,48 @@
              x:Class="Wordsmith.Views.MainPage">
 
     <Shell.TitleView>
-        <Grid ColumnDefinitions="1*" Margin="0, 0, 0, 0">
+        <Grid ColumnDefinitions="1*, Auto" Margin="0, 0, 0, 0">
             <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" Scale="0.8"
-                   Margin="0, 0, 10, 0" Color="#F1E5D1" HorizontalOptions="End"/>
-            <Label Grid.Column="0" Text="Wordsmith" TextColor="#676767" FontSize="20" VerticalTextAlignment="End"
-                   Margin="5, 0, 0, 5" FontAttributes="Bold"/>
+                   Margin="0, 0, 10, 0" Color="#F1E5D1" HorizontalOptions="End" Grid.Column="1"/>
+            <Label Grid.Column="0" Text="Wordsmith" TextColor="{AppThemeBinding Light=#676767, Dark=White}" 
+                   FontSize="20" VerticalTextAlignment="End" Margin="5, 0, 0, 5" FontAttributes="Bold"/>
+            <ImageButton Source="{AppThemeBinding Light=info.png, Dark=info_dark.png}" Scale="0.5"
+                         VerticalOptions="End" HorizontalOptions="End" Margin="0, 12, 0, 0" 
+                         Clicked="InfoButton_Clicked">
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal">
+                                <VisualState.Setters>
+                                    <Setter Property="Scale" Value="0.5"/>
+                                    <Setter Property="Opacity" Value="1.0"/>
+                                </VisualState.Setters>
+                            </VisualState>
+
+                            <VisualState x:Name="Pressed">
+                                <VisualState.Setters>
+                                    <Setter Property="Scale" Value="0.45"/>
+                                    <Setter Property="Opacity" Value="0.8"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </VisualStateManager.VisualStateGroups>
+            </ImageButton>
         </Grid>
     </Shell.TitleView>
 
     <ContentPage.Resources>
         <!--Title Color-->
-        <Color x:Key="TitleColor">#343131</Color>
         <Color x:Key="CardBackground">#F1E5D1</Color>
+        <Color x:Key="TitleColor">#565656</Color>
+        <Color x:Key="SecondaryTextColor">#454545</Color>
+        <Color x:Key="TertiaryTextColor">#000000</Color>
     </ContentPage.Resources>
 
     <Grid RowDefinitions="Auto, 7, 1*">
         <!--Menu Bar-->
-        <Border BackgroundColor="#343131" Stroke="Transparent" Padding="10" StrokeShape="RoundRectangle 5, 5, 5, 5" Margin="5, 0, 5, 0"
+        <Border BackgroundColor="{AppThemeBinding Light=#343131, Dark=#454545}" Stroke="Transparent" Padding="10" StrokeShape="RoundRectangle 5, 5, 5, 5" Margin="5, 0, 5, 0"
                 Grid.Row="0">
             <Grid ColumnDefinitions="1*, Auto">
                 <Label Grid.Column="0" Text="New Poem" TextColor="White" HorizontalOptions="End"
@@ -58,23 +83,24 @@
 
         <!--Poem List-->
         <ScrollView Grid.Row="2" Margin="0, 5, 0, 0"> 
-            <ListView ItemsSource="{Binding Poems}" HasUnevenRows="True" SeparatorColor="AntiqueWhite" SelectedItem="{Binding SelectedPoem, Mode=TwoWay}"
+            <ListView ItemsSource="{Binding Poems}" HasUnevenRows="True" SeparatorVisibility="None" SelectedItem="{Binding SelectedPoem, Mode=TwoWay}"
                       ItemSelected="ListView_ItemSelected" Margin="5" x:Name="PoemListView">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="md:PoemModel">
-                        <cc:CustomViewCell SelectedBackgroundColor="WhiteSmoke">
+                        <cc:CustomViewCell SelectedBackgroundColor="{AppThemeBinding Light=WhiteSmoke, Dark=#787878}">
                             <Border Background="{StaticResource CardBackground}" Margin="0, 0, 0, 2" StrokeShape="RoundRectangle 10, 0, 0, 10"
                                     Stroke="Transparent">
                                 <Grid RowDefinitions="Auto, Auto, Auto" ColumnDefinitions="1*, 1*" Padding="5">
-                                    <Label Grid.Row="0" Text="{Binding Path=Title}" TextColor="#565656" FontSize="14"
+                                    <Label Grid.Row="0" Text="{Binding Path=Title}" TextColor="{StaticResource TitleColor}" FontSize="14"
                                            FontAttributes="Bold"/>
-                                    <Image Grid.Row="0" Grid.Column="1" Source="feather.png" HorizontalOptions="End"
+                                    <Image Grid.Row="0" Grid.Column="1" Source="{AppThemeBinding Light=feather.png, Dark=feather_dark.png}" HorizontalOptions="End"
                                            Grid.RowSpan="2" VerticalOptions="Start"/>
                                     <Label Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding Path=Poem}" LineBreakMode="TailTruncation"
-                                           TextColor="#454545" MinimumHeightRequest="50" FontSize="12"/>
+                                           TextColor="{StaticResource SecondaryTextColor}" MinimumHeightRequest="50" FontSize="12"/>
                                     <Label Grid.Row="2" Grid.Column="1" HorizontalOptions="End" Text="{Binding Path=Author}"
-                                           FontSize="10"/>
-                                    <Label Grid.Row="2" Grid.Column="0" Text="{Binding Path=Date}" FontSize="10"/>
+                                           FontSize="10" TextColor="{StaticResource TertiaryTextColor}"/>
+                                    <Label Grid.Row="2" Grid.Column="0" Text="{Binding Path=Date}" FontSize="10"
+                                           TextColor="{StaticResource TertiaryTextColor}"/>
                                 </Grid>
                             </Border>
                         </cc:CustomViewCell>

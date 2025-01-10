@@ -52,5 +52,10 @@ namespace Wordsmith.Views
                 Navigation.PushAsync(App.EPP);
             }
         }
+
+        private void InfoButton_Clicked(object sender, EventArgs e)
+        {
+            DisplayAlert("About", "Author: Malone K Napier-Jameson.\nVersion: 1.0.0.0", "Close");
+        }
     }
 }
