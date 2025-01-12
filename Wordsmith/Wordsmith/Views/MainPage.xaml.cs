@@ -46,7 +46,7 @@ namespace Wordsmith.Views
                 App.EPPVM.CurrentPoem.ID = null;
                 App.EPPVM.CurrentPoem.Alignment = "left";
                 App.EPPVM.CurrentPoem.Title = "Title"; ;
-                App.EPPVM.CurrentPoem.Date = DateTime.UtcNow.ToString("dddd dd MMM yyyy - hh:mm");
+                App.EPPVM.CurrentPoem.Date = DateTime.Now.ToString("dddd dd MMM yyyy - hh:mm");
                 App.EPPVM.CurrentPoem.Author = "Author";
                 App.EPPVM.CurrentPoem.Poem = "Enter Poem Here";
                 Navigation.PushAsync(App.EPP);

@@ -24,8 +24,8 @@ namespace Wordsmith
         {
             InitializeComponent();
 
-            //// Make sure the application always run in light theme
-            //Application.Current!.UserAppTheme = AppTheme.Light;
+            // Make sure the application always run in light theme
+            //Application.Current!.UserAppTheme = AppTheme.Dark;
         }
 
         protected override Window CreateWindow(IActivationState? activationState)
