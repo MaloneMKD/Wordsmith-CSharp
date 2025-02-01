@@ -48,6 +48,7 @@ namespace Wordsmith.ViewModels
         {
             Poems.Clear();
             var res = await App.Database.GetPoemsAsync();
+            res.Reverse();
             App.Current!.Dispatcher.Dispatch(async () =>
             {
                 await Task.Delay(100);
